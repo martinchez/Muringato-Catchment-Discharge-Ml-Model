@@ -1,0 +1,7 @@
+pandas
+streamlit
+leafmap
+numpy<2
+pyproj
+pathlib
+scikit-learn
