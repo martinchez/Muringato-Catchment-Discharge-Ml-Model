@@ -14,8 +14,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestRegressor
 
-# Load the saved model and preprocessor
-model = pickle.load(open('discharge_model.sav', 'rb'))
 
 #preprocessor = pickle.load(open('path/to/your/preprocessor.sav', 'rb'))
 
@@ -90,6 +88,10 @@ if selected == 'Discharge Level':
         input_data['temp'] = input_data['temp'].fillna(input_data['temp'].mean())
         input_data['voltage_temp'] = input_data['voltage_temp'].fillna(input_data['voltage_temp'].mean())
 
+        
+        # Load the saved model and preprocessor
+        model = pickle.load(open('discharge_model.sav', 'rb'))
+        
         # Apply preprocessing
         #X_new_transformed = preprocessor.transform(input_data)
         prediction = model.predict(input_data)
