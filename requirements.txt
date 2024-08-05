@@ -4,4 +4,4 @@ leafmap
 numpy<2
 pyproj
 pathlib
-scikit-learn
+sklearn
