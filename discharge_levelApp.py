@@ -15,7 +15,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestRegressor
 
 # Load the saved model and preprocessor
-model = pickle.load(open('C:/Users/HP/ml/july24/discharge_model.sav', 'rb'))
+model = pickle.load(open('discharge_model.sav', 'rb'))
 
 #preprocessor = pickle.load(open('path/to/your/preprocessor.sav', 'rb'))
 
