@@ -1,7 +1,6 @@
 pandas
 streamlit
 leafmap
-numpy<2
+numpy
 pyproj
 pathlib
-scikit-learn
