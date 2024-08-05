@@ -14,6 +14,56 @@ from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestRegressor
 
+data = pd.read_csv('discharge.csv')
+# Drop rows with missing 'level' values
+df = data.dropna(subset=['level'])
+df['received_at'] = pd.to_datetime(df['received_at'])
+df['created_at'] = pd.to_datetime(df['created_at'])
+
+
+df['received_hour'] = df['received_at'].dt.hour
+df['received_minute'] = df['received_at'].dt.minute
+
+
+df = df.drop(columns=['id', 'received_at', 'created_at'])
+
+#df['level'] = df['level'].fillna(df['level'].mean())
+df['temp'] = df['temp'].fillna(df['temp'].mean())
+df['voltage_temp'] = df['voltage_temp'].fillna(df['voltage_temp'].mean())
+X = df.drop(columns=['level'])
+y = df['level']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+# Building preprocessing pipeline for categorical and numerical features
+categorical_features = ['device_id', 'application_id']
+numerical_features = [col for col in X.columns if col not in categorical_features]
+
+categorical_transformer = OneHotEncoder(handle_unknown='ignore')
+numerical_transformer = SimpleImputer(strategy='mean')
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('cat', categorical_transformer, categorical_features),
+        ('num', numerical_transformer, numerical_features)
+    ])
+
+
+model = Pipeline(steps=[('preprocessor', preprocessor),
+                        ('regressor', RandomForestRegressor(n_estimators=100, random_state=42))])
+
+model.fit(X_train, y_train)
+
+
+
+
 
 #preprocessor = pickle.load(open('path/to/your/preprocessor.sav', 'rb'))
 
@@ -89,8 +139,7 @@ if selected == 'Discharge Level':
         input_data['voltage_temp'] = input_data['voltage_temp'].fillna(input_data['voltage_temp'].mean())
 
         
-        # Load the saved model and preprocessor
-        model = pickle.load(open('discharge_model.sav', 'rb'))
+       
         
         # Apply preprocessing
         #X_new_transformed = preprocessor.transform(input_data)
